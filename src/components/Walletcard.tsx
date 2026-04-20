@@ -3,11 +3,12 @@
 import FadeIn from "./ui/FadeIn";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { useEffect, useState } from "react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 
 export default function WalletCard() {
   const { publicKey, connected } = useWallet();
-  const { connection } = useConnection(); // ✅ correct way
+  const { connection } = useConnection();
+
   const [balance, setBalance] = useState<number | null>(null);
 
   useEffect(() => {
@@ -25,8 +26,12 @@ export default function WalletCard() {
     getBalance();
   }, [publicKey, connection]);
 
-  const shorten = (key) =>
-    key?.toBase58().slice(0, 4) + "..." + key?.toBase58().slice(-4);
+  const shorten = (key: PublicKey | null) =>
+    key
+      ? key.toBase58().slice(0, 4) +
+        "..." +
+        key.toBase58().slice(-4)
+      : "";
 
   const copy = () => {
     if (!publicKey) return;
@@ -36,9 +41,8 @@ export default function WalletCard() {
   if (!connected) return null;
 
   return (
-    <FadeIn>
+    <FadeIn delay={0.1}>
       <div className="card">
-
         <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-xl shadow-black/40 w-full max-w-md">
 
           {/* HEADER */}

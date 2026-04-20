@@ -47,7 +47,7 @@ export default function TokenList() {
             };
           })
           .filter(
-            (t): t is Token => t !== null && t.balance && t.balance > 0
+            (t): t is Token => t !== null && t.balance > 0
           );
 
         setTokens(list);

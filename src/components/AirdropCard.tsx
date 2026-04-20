@@ -4,12 +4,18 @@ import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useState } from "react";
 
-export default function AirdropCard({ network }) {
+/* ---------------- TYPES ---------------- */
+type AirdropCardProps = {
+  network: "devnet" | "mainnet" | "testnet";
+};
+
+/* ---------------- COMPONENT ---------------- */
+export default function AirdropCard({ network }: AirdropCardProps) {
   const { publicKey } = useWallet();
-  const { connection } = useConnection(); // ✅ use global connection
+  const { connection } = useConnection();
   const [loading, setLoading] = useState(false);
 
-  // ❌ Hide if not devnet or no wallet
+  // Hide if not devnet or no wallet
   if (network !== "devnet" || !publicKey) return null;
 
   const requestAirdrop = async () => {
