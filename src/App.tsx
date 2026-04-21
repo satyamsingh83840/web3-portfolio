@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import WalletCard from "./components/Walletcard";
 import TokenList from "./components/TokenList";
 import AirdropCard from "./components/AirdropCard";
+import SendSolCard from "./components/SendSolCard";
 
 import {
   ConnectionProvider,
@@ -23,8 +24,11 @@ import {
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
+/* ---------------- TYPES ---------------- */
+type NetworkType = "devnet" | "mainnet";
+
 function App() {
-  const [network, setNetwork] = useState<"devnet" | "mainnet">("devnet");
+  const [network, setNetwork] = useState<NetworkType>("devnet");
 
   const devnet =
     import.meta.env.VITE_DEVNET_RPC || "https://api.devnet.solana.com";
@@ -45,7 +49,7 @@ function App() {
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
 
-          {/* 🌌 PREMIUM BACKGROUND */}
+          {/* 🌌 BACKGROUND */}
           <div className="fixed inset-0 -z-10 bg-black">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(168,85,247,0.15),transparent_60%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(59,130,246,0.12),transparent_60%)]" />
@@ -62,15 +66,15 @@ function App() {
                 </span>
               </h1>
 
-              {/* RIGHT */}
+              {/* RIGHT SIDE */}
               <div className="flex items-center gap-4">
 
                 {/* NETWORK SWITCH */}
                 <div className="flex bg-white/5 border border-white/10 rounded-xl p-1 backdrop-blur-md">
-                  {["devnet", "mainnet"].map((net) => (
+                  {(["devnet", "mainnet"] as NetworkType[]).map((net) => (
                     <button
                       key={net}
-                      onClick={() => setNetwork(net as any)}
+                      onClick={() => setNetwork(net)}
                       className={`px-4 py-1.5 text-sm rounded-lg transition-all duration-200 ${
                         network === net
                           ? "bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md"
@@ -104,22 +108,30 @@ function App() {
             {/* GRID */}
             <div className="grid md:grid-cols-3 gap-8">
 
-              {/* LEFT */}
+              {/* LEFT PANEL */}
               <div className="space-y-6">
+
                 <div className="glass-card">
                   <WalletCard />
                 </div>
 
                 <div className="glass-card">
+                  <SendSolCard />
+                </div>
+
+                <div className="glass-card">
                   <AirdropCard network={network} />
                 </div>
+
               </div>
 
-              {/* RIGHT */}
+              {/* RIGHT PANEL */}
               <div className="md:col-span-2 space-y-6">
+
                 <div className="glass-card">
                   <TokenList />
                 </div>
+
               </div>
 
             </div>
